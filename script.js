@@ -4,14 +4,27 @@ document.addEventListener('DOMContentLoaded', () => {
        PRELOADER
        ========================================= */
     const preloader = document.getElementById('preloader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
+    if (preloader) {
+        let preloaderHidden = false;
+        const hidePreloader = () => {
+            if (preloaderHidden) return;
+            preloaderHidden = true;
             preloader.style.opacity = '0';
             setTimeout(() => {
                 preloader.style.display = 'none';
             }, 500);
-        }, 800); // Small delay to show the logo
-    });
+        };
+
+        if (document.readyState === 'complete') {
+            setTimeout(hidePreloader, 800);
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(hidePreloader, 800);
+            });
+            // Safety fallback: hide preloader after 3 seconds anyway if load event doesn't fire
+            setTimeout(hidePreloader, 3000);
+        }
+    }
 
     /* =========================================
        MOBILE MENU & SCROLL HEADER
